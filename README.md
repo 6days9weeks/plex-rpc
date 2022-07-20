@@ -36,7 +36,7 @@ EXAMPLE: config.json
       "token": "HPbrz2NhfLRjU888Rrdt",
       "servers": [
         {
-          "name": "Plex 'N Chill"
+          "name": "Plex"
         },
         {
           "name": "PlexUser123",
