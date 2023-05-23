@@ -276,6 +276,7 @@ class PlexAlertListener(threading.Thread):
                         "small_text": state.capitalize(),
                         "small_image": state,
                     },
+                    "type": 3 if mediaType in ["movie", "episode"] else 2,
                 }
                 if state == "playing":
                     currentTimestamp = int(time.time())

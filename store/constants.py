@@ -2,10 +2,10 @@ import os
 import sys
 
 name = "Discord Rich Presence for Plex"
-version = "1.0.0"
+version = "1.0.1"
 
 plexClientID = "discord-rich-presence-plex"
-discordClientID = "999298904728285215"
+discordClientID = "977282085914021928"
 configFilePath = "config.json"
 cacheFilePath = "cache.json"
 
