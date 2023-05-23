@@ -3,6 +3,7 @@
 import hashlib
 import threading
 import time
+import requests
 import urllib.parse
 
 from plexapi.alert import AlertListener
@@ -33,6 +34,7 @@ class PlexAlertListener(threading.Thread):
         self.discordRpcService = DiscordRpcService()
         self.updateTimeoutTimer = None
         self.connectionTimeoutTimer = None
+        self.IMAGES_URL = requests.get("https://hiumee.github.io/kodi/images_url").text.strip()
         self.reset()
         self.start()
 
@@ -239,15 +241,18 @@ class PlexAlertListener(threading.Thread):
                 else:
                     stateText = formatSeconds(item.duration / 1000)
                 mediaType = item.type
+                thumbUrl = None
                 if mediaType == "movie":
                     title = f"{item.title} ({item.year})"
                     if len(item.genres) > 0:
                         stateText += f" · {', '.join(genre.tag for genre in item.genres[:3])}"
                     largeText = "Watching a movie"
+                    thumbUrl = self.IMAGES_URL + "?name=" + urllib.parse.quote(title) + "&type=movie"
                 elif mediaType == "episode":
                     title = item.grandparentTitle
                     stateText += f" · S{item.parentIndex:02}E{item.index:02} - {item.title}"
                     largeText = "Watching a TV show"
+                    thumbUrl = self.IMAGES_URL + "?name=" + urllib.parse.quote(title) + "&type=tv"
                 elif mediaType == "track":
                     title = item.title
                     artist = item.originalTitle
@@ -258,8 +263,10 @@ class PlexAlertListener(threading.Thread):
                 else:
                     self.logger.debug('Unsupported media type "%s", ignoring', mediaType)
                     return
+                
+                if thumbUrl is None:
+                    thumbUrl = self.IMAGES_URL + "?name=" + urllib.parse.quote(title)
 
-                thumbUrl = "https://kodi-richpresence.herokuapp.com/" + urllib.parse.quote(title)
                 activity = {
                     "details": title[:128],
                     "state": stateText[:128],
